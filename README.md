@@ -5,7 +5,6 @@
 A simple to use gem that interfaces with Apple's new HTTP/2 APNs Service
 
 ## Installation
----
 Add this line to your application's Gemfile:
 
 ```ruby
@@ -21,7 +20,6 @@ Or install it yourself as:
     $ gem install apns_kit
 
 ## Usage
----
 
 ```ruby
 require 'apns_kit'
@@ -44,7 +42,6 @@ notification = ApnsKit::Notification.new (
 )
 ```
 ### Blocking send
----
 This will block the calling thread until all notifications have been sent and we get a response for all
 ```ruby
 # Can send an individual notifications or an array of them
@@ -52,7 +49,6 @@ responses = client.send(notification)
 # [#<ApnsKit::Response:0x007fc0bc065520 200 (Success) notification=#<ApnsKit::Notification:0x007fc0bc0b68d0>>] 
 ```
 ### Non Blocking send
----
 This will not block the calling thread but instead use a callback for individual responses
 ```ruby
 client.send_async(notification) do |response|
@@ -65,20 +61,17 @@ end
 ```
 
 ### Fire and forget
----
 You can also skip passing the block
 ```ruby
 client.send_async(notification)
 ```
 
 ### Client considerations
----
 If you do not provide a topic for a notification the client will use the app bundle id in your certificate as the topic.
 
 Do not setup and forget about clients. If you are using short term connections you need to call `client.shutdown` to terminate the connection and the threads that it creates. If however you are using the client as a long running connection you can leave them open. If for some reason the connection is dropped the client will reinitiate the connection on your behalf.
 
 ## Logger
----
 ApnsKit will use the Rails logger if its present. If not it creates its own logger to `STDOUT`. You can change and modify the logger however you like
 ```ruby
 new_logger = Logger.new("some_path.log")
@@ -86,7 +79,6 @@ ApnsKit.logger = new_logger
 ```
 
 # Classes
-----
 ### ApnsKit::Response
 ```ruby
 # response = <ApnsKit::Response:0x007fc0bc065520 200 (Success) notification=#<ApnsKit::Notification:0x007fc0bc0b68d0>>
