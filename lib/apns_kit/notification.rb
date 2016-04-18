@@ -39,7 +39,7 @@ module ApnsKit
         end
 
         def header
-            {
+            json = {
                 ':scheme' => 'https',
                 ':method' => 'POST',
                 ':path' => "/3/device/#{token}",
@@ -47,6 +47,10 @@ module ApnsKit
                 'content-length' => payload.bytesize.to_s,
                 'apns-topic' => topic
             }
+
+            json.merge!({ "apns-expiry" => @expiry }) if @expiry
+            json.merge!({ "apns-priority" => @priority }) if @priority
+            return json
         end
 
         def payload
