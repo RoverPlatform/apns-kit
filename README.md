@@ -8,7 +8,7 @@ A simple to use gem that interfaces with Apple's new HTTP/2 APNs Service
 Add this line to your application's Gemfile:
 
 ```ruby
-gem 'apns_kit', '~> 0.1.0'
+gem 'apns_kit', '~> 0.1.1'
 ```
 
 And then execute:
