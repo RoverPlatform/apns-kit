@@ -32,7 +32,7 @@ module ApnsKit
             @connection_pool = @pool_size.times.map { ApnsKit::Connection.new(uri, certificate) }.freeze
             @default_topic = certificate.app_bundle_id
             if heartbeat_interval > 0
-                ApnsKit.logger.info("Setting up heartbeat checker")
+                ApnsKit.log_info("Setting up heartbeat checker")
                 @heartbeat_checker = Concurrent::TimerTask.new { @connection_pool.each(&:ping) }
                 @heartbeat_checker.execution_interval = heartbeat_interval
                 @heartbeat_checker.execute

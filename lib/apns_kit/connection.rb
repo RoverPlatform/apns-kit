@@ -32,7 +32,7 @@ module ApnsKit
 
         def ping
             if @http
-                ApnsKit.logger.debug("Sending ping")
+                ApnsKit.log_debug("Sending ping")
                 @http.ping("whatever")
             end
         end
@@ -41,7 +41,7 @@ module ApnsKit
 
         def setup_connection!
             @mutex.synchronize do
-                ApnsKit.logger.info("Setting up connection")
+                ApnsKit.log_info("Setting up connection")
                 ctx = @certificate.ssl_context
                 tcp = TCPSocket.new(@uri.host, @uri.port)
 
@@ -55,13 +55,13 @@ module ApnsKit
 
                 @http = HTTP2::Client.new
                 @http.on(:frame) do |bytes|
-                    ApnsKit.logger.debug("Sending bytes: #{bytes.unpack("H*").first}")
+                    ApnsKit.log_debug("Sending bytes: #{bytes.unpack("H*").first}")
                     @socket.print bytes
                     @socket.flush
                 end
 
                 ping
-                ApnsKit.logger.info("Connection established")
+                ApnsKit.log_info("Connection established")
             end
         end
 
@@ -72,17 +72,17 @@ module ApnsKit
                     begin
                         if @socket.closed?
                             close_connection!
-                            ApnsKit.logger.warn("Socket was closed")
+                            ApnsKit.log_warn("Socket was closed")
                             break
                         elsif !@socket.eof?
                             data = @socket.readpartial(1024)
-                            ApnsKit.logger.debug("Received bytes: #{data.unpack("H*").first}")
+                            ApnsKit.log_debug("Received bytes: #{data.unpack("H*").first}")
                             @http << data
                         end
                     rescue => e
                         close_connection!
-                        ApnsKit.logger.warn("#{e.class} exception: #{e.message} - closing socket")
-                        e.backtrace.each { |l| ApnsKit.logger.debug(l) }
+                        ApnsKit.log_warn("#{e.class} exception: #{e.message} - closing socket")
+                        e.backtrace.each { |l| ApnsKit.log_debug(l) }
                         raise e
                     end
                 end
@@ -98,11 +98,11 @@ module ApnsKit
 
         def close_connection!
             @mutex.synchronize do
-                ApnsKit.logger.info("Closing connection")
+                ApnsKit.log_info("Closing connection")
                 @socket.close if @socket
                 @connected = false
                 @http = nil
-                ApnsKit.logger.info("Connection closed")
+                ApnsKit.log_info("Connection closed")
             end
         end
 

@@ -26,7 +26,7 @@ module ApnsKit
         def perform_nonblocking_send(connection)
             connection.open
 
-            ApnsKit.logger.info("Sending #{@notifications.size} notifications")
+            ApnsKit.log_info("Sending #{@notifications.size} notifications")
             @notifications.each do |notification|
                 stream = connection.http.new_stream
 
@@ -36,7 +36,7 @@ module ApnsKit
                 stream.on(:headers) do |headers|
                     headers = Hash[*headers.flatten]
                     response.headers = headers
-                    ApnsKit.logger.debug("Received headers #{headers}")
+                    ApnsKit.log_debug("Received headers #{headers}")
                     if response.success?
                         yield response if block_given?
                     end
@@ -45,7 +45,7 @@ module ApnsKit
                 stream.on(:data) do |data|
                     response.raw_body ||= ""
                     response.raw_body << data
-                    ApnsKit.logger.debug("Received data #{data}")
+                    ApnsKit.log_debug("Received data #{data}")
                     yield response if block_given?
                 end
 
