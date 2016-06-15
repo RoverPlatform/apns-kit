@@ -1,9 +1,24 @@
 module ApnsKit
     class Certificate
 
-        def initialize(cert_data, passphrase = nil)
-            @key = OpenSSL::PKey::RSA.new(cert_data, passphrase)
-            @certificate = OpenSSL::X509::Certificate.new(cert_data)
+        class << self
+
+            def from_p12_file(data, passphrase = nil)
+                p12 = OpenSSL::PKCS12.new(data, passphrase)
+                ApnsKit::Certificate.new(p12.key, p12.certificate)
+            end
+
+            def from_pem_file(data, passphrase = nil)
+                key = OpenSSL::PKey::RSA.new(data, passphrase)
+                certificate = OpenSSL::X509::Certificate.new(data)
+                ApnsKit::Certificate.new(key, certificate)
+            end
+
+        end
+
+        def initialize(key, certificate)
+            @key = key
+            @certificate = certificate
         end
 
         def ssl_context

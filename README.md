@@ -24,7 +24,8 @@ Or install it yourself as:
 ```ruby
 require 'apns_kit'
 
-certificate = ApnsKit::Certificate.new(File.read("path_to_certificate.pem"), "password_or_nil")
+certificate = ApnsKit::Certificate.from_p12_file(File.read("path_to_cert.p12"), "password_or_nil")
+certificate = ApnsKit::Certificate.from_pem_file(File.read("path_to_cert.pem"), "password_or_nil")
 
 # create a production client (you can also call ApnsKit::Client.development with the same options)
 # pool_size is the number of open connections defaults to 1 (advisable to keep the default value)
